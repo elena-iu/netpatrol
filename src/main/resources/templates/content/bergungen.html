@@ -1,0 +1,523 @@
+<!-- Bergungen Content: Übersicht aktiver Bergungen mit Umverteilungsanfragen -->
+<div class="section" style="margin-top: -64px;">
+    <!-- Umverteilungsanfragen Section: Zeigt eingehende Anfragen für den aktuellen Berger -->
+    <div id="requests-section" style="display: none; background: var(--bg-2); border: 1px solid rgba(148, 163, 184, 0.12); border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+        <h3 style="margin: 0 0 16px 0; font-size: 18px; font-weight: 700; color: var(--txt-0);">Umverteilungsanfragen</h3>
+        <div id="requests-list">
+            <!-- Anfragen werden hier geladen -->
+        </div>
+    </div>
+    
+    <p class="muted" style="margin: 0;">Hier siehst du alle aktiven Bergungen und kannst direkt mit den Bergenden in Kontakt treten.</p>
+
+    <!-- Tabelle: Aktive Bergungen (Status BERGUNG_BEVORSTEHEND) -->
+    <div style="margin-top: 16px;">
+        <table class="ghostnet-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Standort</th>
+                    <th>Größe</th>
+                    <th>Gemeldet am</th>
+                    <th>Bergung von</th>
+                    <!-- Aktionen-Spalte: Kontakt-Button -->
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="bergungen-table-body">
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 24px;">
+                        <p class="muted">Laden...</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- JavaScript: Lädt Bergungen, Umverteilungsanfragen und verwaltet Kontakt-Modal -->
+<script>
+    (function() {
+        'use strict';
+
+        // Cache für Salvor-Usernames nach ID um wiederholte Requests zu vermeiden
+        const salvorCache = {};
+        
+        // Aktuelle User-ID - wird geladen
+        let currentUserId = null;
+
+        /**
+         * Formatiert ein Datumsfeld für die Anzeige
+         * Unterstützt verschiedene Datumsformate (Array, String)
+         * @param {*} dateField Datumsfeld
+         * @return {string} Formatiertes Datum oder 'N/A'
+         */
+        function formatDate(dateField) {
+            if (!dateField || dateField === null) {
+                return 'N/A';
+            }
+            try {
+                if (Array.isArray(dateField)) {
+                    const date = new Date(dateField[0], dateField[1] - 1, dateField[2], dateField[3] || 0, dateField[4] || 0);
+                    if (!isNaN(date.getTime())) {
+                        return date.toLocaleDateString('de-DE', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                    }
+                } else if (typeof dateField === 'string') {
+                    const date = new Date(dateField);
+                    if (!isNaN(date.getTime())) {
+                        return date.toLocaleDateString('de-DE', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                    }
+                }
+            } catch (e) {
+                console.error('Date parse error:', e);
+            }
+            return 'N/A';
+        }
+
+        /**
+         * Formatiert Standort-Informationen für die Anzeige
+         * Priorisiert Koordinaten über Textbeschreibung
+         * @param {Object} net Geisternetz-Objekt
+         * @return {string} Formatierter Standort oder 'N/A'
+         */
+        function formatLocation(net) {
+            if (net && net.latitude != null && net.longitude != null) {
+                return `${Number(net.latitude).toFixed(6)}, ${Number(net.longitude).toFixed(6)}`;
+            }
+            if (net && net.location && net.location.trim() !== '') return net.location;
+            return 'N/A';
+        }
+
+        /**
+         * Lädt Salvor-Username von der API
+         * Verwendet Cache um wiederholte Requests zu vermeiden
+         * @param {number} salvorId ID des Salvors
+         * @return {Promise<string>} Username oder 'N/A'
+         */
+        function fetchSalvorUsername(salvorId) {
+            if (!salvorId) return Promise.resolve('N/A');
+            if (salvorCache[salvorId]) return Promise.resolve(salvorCache[salvorId]);
+            return fetch(`/api/user/by-id/${salvorId}`)
+                .then(r => r.ok ? r.json() : null)
+                .then(data => {
+                    const username = data && data.username ? data.username : 'N/A';
+                    salvorCache[salvorId] = username;
+                    return username;
+                })
+                .catch(() => 'N/A');
+        }
+
+        /**
+         * Lädt alle aktiven Bergungen (Status BERGUNG_BEVORSTEHEND)
+         * Zeigt sie in der Tabelle an mit Salvor-Usernames
+         */
+        function loadBergungen() {
+            const tbody = document.getElementById('bergungen-table-body');
+            if (!tbody) return;
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 24px;"><p class="muted">Laden...</p></td></tr>';
+
+            fetch('/api/ghostnets')
+                .then(response => {
+                    if (!response.ok) throw new Error('HTTP ' + response.status);
+                    return response.json();
+                })
+                .then(async data => {
+                    const pending = (data || []).filter(net => {
+                        const s = (net.status || '').toUpperCase();
+                        return s === 'BERGUNG_BEVORSTEHEND';
+                    });
+
+                    if (pending.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 24px;"><p class="muted">Keine Bergungen vorhanden.</p></td></tr>';
+                        return;
+                    }
+
+                    // Resolve salvor usernames in parallel with caching
+                    const usernamePromises = pending.map(net => fetchSalvorUsername(net.salvorUserId));
+                    const usernames = await Promise.all(usernamePromises);
+
+                    tbody.innerHTML = pending.map((net, idx) => {
+                        const reportedDate = formatDate(net.createdAt || net.reportedAt);
+                        const location = formatLocation(net);
+                        const size = (net.estimatedSize && net.estimatedSize.trim() !== '') ? net.estimatedSize : 'N/A';
+                        const salvor = usernames[idx] || 'N/A';
+                        const contactButton = `<button class="btn btn-primary" onclick="openContactModal(${net.salvorUserId || 'null'}, ${net.id || 'null'})" ${net.salvorUserId ? '' : 'disabled'} title="Kontakt zum Bergenden">Kontakt</button>`;
+                        return `
+                            <tr>
+                                <td>#${net.id || 'N/A'}</td>
+                                <td>${location}</td>
+                                <td>${size}</td>
+                                <td>${reportedDate}</td>
+                                <td>${salvor}</td>
+                                <td>${contactButton}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                })
+                .catch(error => {
+                    console.error('Error loading bergungen:', error);
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 24px;"><p class="muted">Fehler beim Laden: ' + error.message + '</p></td></tr>';
+                });
+        }
+
+        /**
+         * Lädt die ID des aktuellen Users
+         * Startet dann das Laden von Bergungen und Anfragen
+         */
+        function loadCurrentUserId() {
+            fetch('/api/user/current')
+                .then(r => r.ok ? r.json() : null)
+                .then(data => {
+                    if (data && data.username) {
+                        // Fetch full user to get ID
+                        return fetch(`/api/user/by-username/${data.username}`)
+                            .then(r => r.ok ? r.json() : null);
+                    }
+                    return null;
+                })
+                .then(data => {
+                    if (data && data.id) {
+                        currentUserId = data.id;
+                    }
+                    loadBergungen();
+                    loadRequests();
+                })
+                .catch(() => {
+                    loadBergungen();
+                    loadRequests();
+                });
+        }
+        
+        /**
+         * Lädt Umverteilungsanfragen für den aktuellen Berger
+         * Zeigt sie oben auf der Seite an wenn vorhanden
+         */
+        function loadRequests() {
+            fetch('/api/reassignment-requests/my-requests')
+                .then(r => {
+                    if (!r.ok) {
+                        document.getElementById('requests-section').style.display = 'none';
+                        return;
+                    }
+                    return r.json();
+                })
+                .then(requests => {
+                    const section = document.getElementById('requests-section');
+                    const list = document.getElementById('requests-list');
+                    if (!section || !list) return;
+                    
+                    if (!requests || requests.length === 0) {
+                        section.style.display = 'none';
+                        return;
+                    }
+                    
+                    section.style.display = 'block';
+                    list.innerHTML = requests.map(req => {
+                        const date = req.createdAt ? formatDate(req.createdAt) : 'N/A';
+                        const requesterName = req.requesterName || req.requesterUsername || 'Unbekannt';
+                        const location = req.ghostNetLocation || 'N/A';
+                        const size = req.ghostNetSize || 'N/A';
+                        return `
+                            <div style="background: var(--bg-1); border: 1px solid rgba(148, 163, 184, 0.12); border-radius: 10px; padding: 16px; margin-bottom: 12px;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
+                                    <div style="flex: 1;">
+                                        <p style="margin: 0 0 8px 0; font-weight: 600; color: var(--txt-0);">${requesterName} möchte Geisternetz #${req.ghostNetId} übernehmen</p>
+                                        <p style="margin: 0 0 4px 0; font-size: 14px; color: var(--txt-1);"><strong>Standort:</strong> ${location}</p>
+                                        <p style="margin: 0 0 4px 0; font-size: 14px; color: var(--txt-1);"><strong>Größe:</strong> ${size}</p>
+                                        <p style="margin: 0; font-size: 12px; color: var(--txt-2);">Angefragt am: ${date}</p>
+                                    </div>
+                                    <div style="display: flex; gap: 8px;">
+                                        <button class="btn btn-secondary" onclick="rejectRequest(${req.id})" style="padding: 8px 16px; font-size: 14px;">Ablehnen</button>
+                                        <button class="btn btn-primary" onclick="acceptRequest(${req.id})" style="padding: 8px 16px; font-size: 14px;">Annehmen</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                })
+                .catch(() => {
+                    document.getElementById('requests-section').style.display = 'none';
+                });
+        }
+        
+        /**
+         * Nimmt eine Umverteilungsanfrage an
+         * Überträgt die Bergungsverantwortung auf den Antragsteller
+         * @param {number} requestId ID der Anfrage
+         */
+        window.acceptRequest = function(requestId) {
+            fetch(`/api/reassignment-requests/${requestId}/accept`, {
+                method: 'PUT'
+            })
+            .then(r => {
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                return r.json();
+            })
+            .then(() => {
+                loadRequests();
+                loadBergungen(); // Reload to show updated assignments
+            })
+            .catch(err => {
+                console.error('Error accepting request:', err);
+                alert('Fehler beim Annehmen der Anfrage');
+            });
+        };
+        
+        /**
+         * Lehnt eine Umverteilungsanfrage ab
+         * @param {number} requestId ID der Anfrage
+         */
+        window.rejectRequest = function(requestId) {
+            fetch(`/api/reassignment-requests/${requestId}/reject`, {
+                method: 'PUT'
+            })
+            .then(r => {
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                return r.json();
+            })
+            .then(() => {
+                loadRequests();
+            })
+            .catch(err => {
+                console.error('Error rejecting request:', err);
+                alert('Fehler beim Ablehnen der Anfrage');
+            });
+        };
+        
+        // Initiales Laden beim Start der Seite
+        loadCurrentUserId();
+
+        // Kontakt-Modal mit Captcha
+        let contactCaptchaCode = '';
+        
+        /**
+         * Generiert einen neuen Captcha-Code für das Kontakt-Modal
+         * Erstellt einen 5-stelligen alphanumerischen Code
+         */
+        window.generateContactCaptcha = function() {
+            contactCaptchaCode = '';
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            for (let i = 0; i < 5; i++) {
+                contactCaptchaCode += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            const img = document.getElementById('contact-captcha-image');
+            if (img) img.textContent = contactCaptchaCode;
+            const input = document.getElementById('contact-captcha-input');
+            if (input) input.value = '';
+        }
+        
+        /**
+         * Validiert den eingegebenen Captcha-Code im Kontakt-Modal
+         * @return {boolean} true wenn Code korrekt ist
+         */
+        function validateContactCaptcha() {
+            const v = (document.getElementById('contact-captcha-input')?.value || '').trim();
+            return v === contactCaptchaCode;
+        }
+        
+        /**
+         * Öffnet das Kontakt-Modal für einen Berger
+         * Zeigt Captcha-Formular für Spam-Schutz
+         * @param {number} salvorId ID des Salvors
+         * @param {number} ghostNetId ID des Geisternetzes
+         */
+        window.openContactModal = function(salvorId, ghostNetId) {
+            const modal = document.getElementById('contact-modal');
+            if (!modal) return;
+            modal.style.display = 'flex';
+            modal.setAttribute('data-salvor-id', salvorId || '');
+            modal.setAttribute('data-ghost-net-id', ghostNetId || '');
+            const content = modal.querySelector('.modal-content');
+            content.innerHTML = `
+                <div class="modal-header">
+                    <h2>Kontakt aufnehmen</h2>
+                    <button class="modal-close" onclick="closeContactModal()">
+                        <span class="material-symbols-rounded">close</span>
+                    </button>
+                </div>
+                <div class="modal-form" style="padding: 16px;">
+                    <div class="form-group">
+                        <label for="contact-captcha-input">Sicherheitscode</label>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div id="contact-captcha-image" style="background: var(--bg-2); border: 1px solid rgba(148, 163, 184, 0.16); border-radius: 10px; padding: 12px 20px; font-weight: 600; font-size: 24px; letter-spacing: 4px; text-align: center; color: var(--txt-0); font-family: 'Courier New', monospace; min-width: 120px; height: 50px; display: flex; align-items: center; justify-content: center; user-select: none; text-decoration: line-through; font-style: italic; border: 2px solid var(--brand);"></div>
+                            <button type="button" onclick="generateContactCaptcha()" style="padding: 10px 16px; background: var(--bg-2); border: 1px solid rgba(148, 163, 184, 0.16); border-radius: 10px; color: var(--txt-0); font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s ease; height: 50px; display: flex; align-items: center; justify-content: center;" onmouseover="this.style.background='var(--bg-3)'" onmouseout="this.style.background='var(--bg-2)'"><span class="material-symbols-rounded" style="font-size: 20px;">refresh</span></button>
+                        </div>
+                        <input type="text" id="contact-captcha-input" name="captcha" placeholder="Geben Sie den Code oben ein" required style="margin-top: 12px;">
+                    </div>
+                    <div id="contact-error" class="error-message" style="display: none;"></div>
+                    <div class="form-actions" style="padding-bottom: 8px;">
+                        <button type="button" class="btn btn-secondary" onclick="closeContactModal()">Abbrechen</button>
+                        <button type="button" class="btn btn-primary" onclick="submitContactCaptcha()">Bestätigen</button>
+                    </div>
+                </div>`;
+            // ensure captcha appears and refresh button works
+            setTimeout(window.generateContactCaptcha, 50);
+        }
+        
+        /**
+         * Schließt das Kontakt-Modal
+         * Entfernt gespeicherte Salvor- und Geisternetz-IDs
+         */
+        window.closeContactModal = function() {
+            const modal = document.getElementById('contact-modal');
+            if (!modal) return;
+            modal.style.display = 'none';
+            modal.removeAttribute('data-salvor-id');
+            modal.removeAttribute('data-ghost-net-id');
+        }
+        
+        /**
+         * Sendet eine Umverteilungsanfrage für ein Geisternetz
+         * Zeigt Erfolgsmeldung im Modal
+         * @param {number} ghostNetId ID des Geisternetzes
+         */
+        window.requestReassignment = function(ghostNetId) {
+            if (!ghostNetId) {
+                alert('Fehler: Geisternetz-ID nicht gefunden');
+                return;
+            }
+            
+            fetch('/api/reassignment-requests', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ ghostNetId: ghostNetId })
+            })
+            .then(r => {
+                if (!r.ok) {
+                    return r.text().then(text => {
+                        throw new Error(text || 'Fehler beim Erstellen der Anfrage');
+                    });
+                }
+                return r.json();
+            })
+            .then(() => {
+                // Show success message in the modal (consistent with other modals)
+                const modal = document.getElementById('contact-modal');
+                const content = modal ? modal.querySelector('.modal-content') : null;
+                if (content) {
+                    content.innerHTML = `
+                        <div style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px; padding:48px 24px;">
+                            <span class="material-symbols-rounded" style="font-size:54px; color:#22c55e;">check_circle</span>
+                            <h2 style="margin:0; font-size:24px; font-weight:700; color:var(--txt-0);">Anfrage gesendet</h2>
+                            <p style="margin:0; color:var(--txt-1); font-size:14px;">Die Umverteilungsanfrage wurde erfolgreich übermittelt.</p>
+                        </div>
+                    `;
+                }
+                setTimeout(() => {
+                    closeContactModal();
+                    // Refresh requests section to show new pending request if viewer is salvor
+                    if (typeof loadRequests === 'function') {
+                        loadRequests();
+                    }
+                }, 1800);
+            })
+            .catch(err => {
+                console.error('Error requesting reassignment:', err);
+                alert('Fehler: ' + err.message);
+            });
+        };
+        
+        /**
+         * Verarbeitet die Captcha-Validierung im Kontakt-Modal
+         * Lädt nach erfolgreicher Validierung die Kontaktdaten des Salvors
+         * Zeigt auch "Umverteilung anfragen" Button wenn nicht eigene Zuweisung
+         */
+        window.submitContactCaptcha = function() {
+            const errorDiv = document.getElementById('contact-error');
+            if (errorDiv) errorDiv.style.display = 'none';
+            if (!validateContactCaptcha()) {
+                if (errorDiv) {
+                    errorDiv.textContent = 'Der Sicherheitscode ist falsch. Bitte versuchen Sie es erneut.';
+                    errorDiv.style.display = 'block';
+                }
+                generateContactCaptcha();
+                const input = document.getElementById('contact-captcha-input');
+                if (input) input.value = '';
+                return;
+            }
+            const modal = document.getElementById('contact-modal');
+            const salvorId = modal?.getAttribute('data-salvor-id');
+            if (!salvorId) { closeContactModal(); return; }
+            const content = modal.querySelector('.modal-content');
+            content.innerHTML = `
+                <div style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px; padding:48px 24px;">
+                    <div style="width: 40px; height: 40px; border: 4px solid var(--brand); border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+                    <p style="margin:0; color:var(--txt-1); font-size:14px;">Lade Kontaktdaten...</p>
+                </div>`;
+            fetch(`/api/user/by-id/${salvorId}`)
+                .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+                .then(data => {
+                    const name = (data && data.name && data.name.trim() !== '') ? data.name : 'N/A';
+                    const phone = (data && data.phone && data.phone.trim() !== '') ? data.phone : 'N/A';
+                    const modal = document.getElementById('contact-modal');
+                    const ghostNetId = modal?.getAttribute('data-ghost-net-id');
+                    const salvorIdNum = salvorId ? Number(salvorId) : null;
+                    const isOwnAssignment = currentUserId && salvorIdNum && Number(currentUserId) === salvorIdNum;
+                    const reassignButton = isOwnAssignment 
+                        ? `<button class="btn btn-primary" disabled style="opacity: 0.5; cursor: not-allowed; margin-top: 12px;">Umverteilung anfragen</button>`
+                        : `<button class="btn btn-primary" onclick="requestReassignment(${ghostNetId})" style="margin-top: 12px;">Umverteilung anfragen</button>`;
+                    content.innerHTML = `
+                        <div class="modal-header">
+                            <h2>Kontaktinformationen</h2>
+                            <button class="modal-close" onclick="closeContactModal()"><span class="material-symbols-rounded">close</span></button>
+                        </div>
+                        <div style="padding: 24px;">
+                            <div style="background: var(--bg-2); border: 1px solid rgba(148, 163, 184, 0.12); border-radius: 10px; padding: 16px; width: 100%; max-width: 520px; margin: 0 auto;">
+                                <div style="display:flex; gap:12px;"><strong style="min-width:120px; color: var(--txt-0);">Name:</strong><span style="color: var(--txt-1);">${name}</span></div>
+                                <div style="display:flex; gap:12px; margin-top:8px;"><strong style="min-width:120px; color: var(--txt-0);">Telefon:</strong><span style="color: var(--txt-1);">${phone}</span></div>
+                            </div>
+                            <div style="display:flex; justify-content:center; margin-top:16px;">
+                                ${reassignButton}
+                            </div>
+                        </div>`;
+                })
+                .catch(() => {
+                    content.innerHTML = `
+                        <div class="modal-header">
+                            <h2>Fehler</h2>
+                            <button class="modal-close" onclick="closeContactModal()"><span class="material-symbols-rounded">close</span></button>
+                        </div>
+                        <div style="padding: 24px;">
+                            <p style="color: var(--txt-1); margin-bottom: 16px;">Kontaktdaten konnten nicht geladen werden.</p>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-primary" onclick="closeContactModal()">Schließen</button>
+                            </div>
+                        </div>`;
+                });
+        }
+    })();
+</script>
+
+<!-- Contact Modal -->
+<div id="contact-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <!-- Content will be dynamically inserted -->
+    </div>
+    <style>
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</div>
+
+<script>
+    // Close modal when clicking outside
+    document.getElementById('contact-modal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeContactModal();
+        }
+    });
+</script>
+

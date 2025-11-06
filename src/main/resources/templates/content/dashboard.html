@@ -1,0 +1,459 @@
+<!-- Dashboard Content: Übersicht mit Statistiken und neuesten Meldungen -->
+<div class="section" style="margin-top: -64px;">
+    <p class="muted">Willkommen zurück, <span id="user-name-display">-</span>!</p>
+    
+    <!-- Statistik-Karten: Gemeldete Netze, Geborgene Netze, Aktive Bergungen -->
+    <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 32px;">
+        <!-- Stat Card: Gemeldete Netze -->
+        <div class="stat-card" style="background: var(--bg-2); border: 1px solid rgba(148, 163, 184, 0.12); border-radius: 16px; padding: 32px; position: relative; overflow: hidden;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                <div>
+                    <p style="margin: 0; color: var(--txt-1); font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Gemeldete Netze</p>
+                    <h2 id="reported-count" style="margin: 8px 0 0 0; font-size: 36px; font-weight: 700; color: var(--txt-0);">-</h2>
+                </div>
+                <div style="width: 64px; height: 64px; border-radius: 16px; background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%); display: flex; align-items: center; justify-content: center;">
+                    <span class="material-symbols-rounded" style="font-size: 32px; color: var(--brand);">description</span>
+                </div>
+            </div>
+            <p style="margin: 0; color: var(--txt-1); font-size: 13px;">Gesamtanzahl deiner Meldungen</p>
+        </div>
+        
+        <!-- Stat Card: Geborgene Netze -->
+        <div class="stat-card" style="background: var(--bg-2); border: 1px solid rgba(148, 163, 184, 0.12); border-radius: 16px; padding: 32px; position: relative; overflow: hidden;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                <div>
+                    <p style="margin: 0; color: var(--txt-1); font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Geborgene Netze</p>
+                    <h2 id="recovered-count" style="margin: 8px 0 0 0; font-size: 36px; font-weight: 700; color: var(--txt-0);">-</h2>
+                </div>
+                <div style="width: 64px; height: 64px; border-radius: 16px; background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(16, 185, 129, 0.2) 100%); display: flex; align-items: center; justify-content: center;">
+                    <span class="material-symbols-rounded" style="font-size: 32px; color: #22c55e;">check_circle</span>
+                </div>
+            </div>
+            <p style="margin: 0; color: var(--txt-1); font-size: 13px;">Von dir geborgene Geisternetze</p>
+        </div>
+        
+        <!-- Stat Card: Aktive Bergungen - zeigt die letzten 2 aktiven Bergungen -->
+        <div class="stat-card" style="background: var(--bg-2); border: 1px solid rgba(148, 163, 184, 0.12); border-radius: 16px; padding: 24px; position: relative; overflow: hidden; grid-column: span 1;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, rgba(251, 188, 4, 0.2) 0%, rgba(245, 158, 11, 0.2) 100%); display: flex; align-items: center; justify-content: center;">
+                        <span class="material-symbols-rounded" style="font-size: 24px; color: #fbbf24;">route</span>
+                    </div>
+                    <div>
+                        <p style="margin: 0; color: var(--txt-1); font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Aktive Bergungen</p>
+                    </div>
+                </div>
+                <a href="/bergungen" style="color: var(--brand); font-weight: 600; font-size: 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+                    Alle ansehen
+                    <span class="material-symbols-rounded" style="font-size: 16px;">arrow_forward</span>
+                </a>
+            </div>
+            <!-- Tabelle mit aktiven Bergungen -->
+            <div style="margin-top: 12px;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid rgba(148, 163, 184, 0.12);">
+                            <th style="padding: 8px 4px; text-align: left; font-weight: 600; color: var(--txt-1); font-size: 11px; text-transform: uppercase;">ID</th>
+                            <th style="padding: 8px 4px; text-align: left; font-weight: 600; color: var(--txt-1); font-size: 11px; text-transform: uppercase;">Standort</th>
+                            <th style="padding: 8px 4px; text-align: left; font-weight: 600; color: var(--txt-1); font-size: 11px; text-transform: uppercase;">Bergung von</th>
+                        </tr>
+                    </thead>
+                    <tbody id="active-bergungen-table-body">
+                        <tr>
+                            <td colspan="3" style="text-align: center; padding: 16px; color: var(--txt-1); font-size: 12px;">Laden...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="sep" style="margin: 48px 0;"></div>
+    
+    <!-- Neueste Meldungen: Tabelle mit den letzten 4 Geisternetz-Meldungen -->
+    <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h2 style="margin: 0;">Neueste Meldungen</h2>
+            <a href="/meldungen" style="color: var(--brand); font-weight: 600; font-size: 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+                Alle ansehen
+                <span class="material-symbols-rounded" style="font-size: 18px;">arrow_forward</span>
+            </a>
+        </div>
+        
+        <div style="margin-top: 6px;">
+            <table class="ghostnet-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Standort</th>
+                        <th>Größe</th>
+                        <th>Status</th>
+                        <th>Gemeldet am</th>
+                        <th>Gemeldet von</th>
+                    </tr>
+                </thead>
+                <tbody id="latest-ghostnets-table-body">
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 24px;">
+                            <p class="muted">Laden...</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript: Lädt Dashboard-Daten (Statistiken, User-Name, neueste Meldungen, aktive Bergungen) -->
+<script>
+    (function() {
+        'use strict';
+        
+        /**
+         * Lädt den Namen des aktuellen Users
+         * Zeigt den vollständigen Namen falls vorhanden, sonst Username
+         */
+        function loadUserName() {
+            fetch('/api/user/current')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('HTTP ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const userNameElement = document.getElementById('user-name-display');
+                    if (userNameElement) {
+                        // Vollständigen Namen verwenden falls vorhanden, sonst Username
+                        const userName = data.name && data.name.trim() !== '' ? data.name : data.username;
+                        userNameElement.textContent = userName;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading user name:', error);
+                    const userNameElement = document.getElementById('user-name-display');
+                    if (userNameElement) {
+                        userNameElement.textContent = '';
+                    }
+                });
+        }
+        
+        /**
+         * Lädt Dashboard-Statistiken (gemeldete und geborgene Netze)
+         */
+        function loadDashboardStats() {
+            fetch('/api/ghostnets/stats')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('HTTP ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const reportedCount = data.reported || 0;
+                    const recoveredCount = data.recovered || 0;
+                    
+                    const reportedElement = document.getElementById('reported-count');
+                    const recoveredElement = document.getElementById('recovered-count');
+                    
+                    if (reportedElement) {
+                        reportedElement.textContent = reportedCount;
+                    }
+                    if (recoveredElement) {
+                        recoveredElement.textContent = recoveredCount;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading dashboard stats:', error);
+                    const reportedElement = document.getElementById('reported-count');
+                    const recoveredElement = document.getElementById('recovered-count');
+                    if (reportedElement) reportedElement.textContent = '0';
+                    if (recoveredElement) recoveredElement.textContent = '0';
+                });
+        }
+        
+        /**
+         * Formatiert ein Datum für die Anzeige
+         * Unterstützt verschiedene Datumsformate (Array, String)
+         * @param {*} dateField Datumsfeld
+         * @return {string} Formatiertes Datum oder 'N/A'
+         */
+        function formatDateForDisplay(dateField) {
+            if (!dateField || dateField === null) {
+                return 'N/A';
+            }
+            
+            try {
+                if (Array.isArray(dateField)) {
+                    const date = new Date(dateField[0], dateField[1] - 1, dateField[2], 
+                        dateField[3] || 0, dateField[4] || 0);
+                    if (!isNaN(date.getTime())) {
+                        return date.toLocaleDateString('de-DE', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                    }
+                } else if (typeof dateField === 'string') {
+                    const date = new Date(dateField);
+                    if (!isNaN(date.getTime())) {
+                        return date.toLocaleDateString('de-DE', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                    }
+                }
+            } catch (e) {
+                console.error('Error parsing date:', e);
+            }
+            return 'N/A';
+        }
+        
+        /**
+         * Parst ein Datumsfeld in ein Date-Objekt
+         * Unterstützt verschiedene Datumsformate (Array, String)
+         * @param {*} dateField Datumsfeld
+         * @return {Date|null} Date-Objekt oder null
+         */
+        function parseDate(dateField) {
+            if (!dateField || dateField === null) return null;
+            
+            try {
+                if (Array.isArray(dateField)) {
+                    return new Date(dateField[0], dateField[1] - 1, dateField[2], 
+                        dateField[3] || 0, dateField[4] || 0);
+                } else if (typeof dateField === 'string') {
+                    return new Date(dateField);
+                }
+            } catch (e) {
+                console.error('Date parse error:', e);
+            }
+            return null;
+        }
+        
+        /**
+         * Lädt die neuesten Geisternetze
+         * Sortiert nach Datum und zeigt nur die letzten 4 an
+         */
+        function loadLatestGhostNets() {
+            fetch('/api/ghostnets')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('HTTP ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const tbody = document.getElementById('latest-ghostnets-table-body');
+                    if (!tbody) return;
+                    
+                    if (!data || data.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 24px;"><p class="muted">Keine Meldungen vorhanden.</p></td></tr>';
+                        return;
+                    }
+                    
+                    // Nach Datum sortieren (neueste zuerst) und nur die ersten 4 nehmen
+                    const sorted = [...data].sort((a, b) => {
+                        const dateA = parseDate(a.createdAt || a.reportedAt);
+                        const dateB = parseDate(b.createdAt || b.reportedAt);
+                        if (dateA && dateB) {
+                            return dateB.getTime() - dateA.getTime();
+                        } else if (dateA) {
+                            return -1;
+                        } else if (dateB) {
+                            return 1;
+                        }
+                        return 0;
+                    });
+                    
+                    const latest = sorted.slice(0, 4);
+                    
+                    if (latest.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 24px;"><p class="muted">Keine Meldungen vorhanden.</p></td></tr>';
+                        return;
+                    }
+                    
+                    tbody.innerHTML = latest.map(net => {
+                        const reportedDate = formatDateForDisplay(net.createdAt || net.reportedAt);
+                        
+                        const status = (net.status && net.status.trim() !== '') ? net.status : 'Unbekannt';
+                        const statusUpper = status.toUpperCase();
+                        
+                        // Status-Klasse bestimmen für Badge-Styling
+                        let statusClass = 'unknown';
+                        if (statusUpper === 'GEMELDET') {
+                            statusClass = 'gemeldet';
+                        } else if (statusUpper === 'BERGUNG_BEVORSTEHEND') {
+                            statusClass = 'bergung-bevorstehend';
+                        } else if (statusUpper === 'GEBORGEN') {
+                            statusClass = 'geborgen';
+                        } else if (statusUpper === 'VERSCHOLLEN') {
+                            statusClass = 'verschollen';
+                        }
+                        
+                        // Status mit Leerzeichen statt Unterstrichen anzeigen
+                        const statusDisplay = status.replace(/_/g, ' ');
+                        
+                        // Standort formatieren (für VERSCHOLLEN in Klammern und grau)
+                        const isVerschollen = statusUpper === 'VERSCHOLLEN';
+                        let locationDisplay = 'N/A';
+                        if (net.latitude !== null && net.latitude !== undefined && 
+                            net.longitude !== null && net.longitude !== undefined) {
+                            const location = `${net.latitude.toFixed(6)}, ${net.longitude.toFixed(6)}`;
+                            locationDisplay = isVerschollen ? `(${location})` : location;
+                        } else if (net.location && net.location.trim() !== '') {
+                            locationDisplay = isVerschollen ? `(${net.location})` : net.location;
+                        }
+                        
+                        // reportedBy (Username) verwenden falls verfügbar
+                        let reporterDisplay = 'Anonym';
+                        if (net.reportedBy && net.reportedBy.trim() !== '') {
+                            reporterDisplay = net.reportedBy;
+                        } else if (net.reporterName && net.reporterName.trim() !== '') {
+                            reporterDisplay = net.reporterName;
+                        }
+                        
+                        // Geschätzte Größe formatieren
+                        const estimatedSize = (net.estimatedSize && net.estimatedSize.trim() !== '') ? net.estimatedSize : 'N/A';
+                        
+                        return `
+                            <tr>
+                                <td>#${net.id || 'N/A'}</td>
+                                <td style="${isVerschollen ? 'color: var(--txt-1); opacity: 0.6;' : ''}">${locationDisplay}</td>
+                                <td>${estimatedSize}</td>
+                                <td><span class="status-badge status-${statusClass}">${statusDisplay}</span></td>
+                                <td>${reportedDate}</td>
+                                <td>${reporterDisplay}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                })
+                .catch(error => {
+                    console.error('Error loading latest ghost nets:', error);
+                    const tbody = document.getElementById('latest-ghostnets-table-body');
+                    if (tbody) {
+                        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 24px;"><p class="muted">Fehler beim Laden der Daten.</p></td></tr>';
+                    }
+                });
+        }
+        
+        // User-Name und Statistiken beim Laden der Seite laden
+        loadUserName();
+        
+        // Statistiken laden wenn Elemente vorhanden sind
+        if (document.getElementById('reported-count') && document.getElementById('recovered-count')) {
+            loadDashboardStats();
+        } else {
+            // Retry falls Elemente noch nicht vorhanden sind
+            setTimeout(() => {
+                if (document.getElementById('reported-count') && document.getElementById('recovered-count')) {
+                    loadDashboardStats();
+                }
+            }, 100);
+        }
+        
+        /**
+         * Lädt Username eines Bergers anhand der ID
+         * @param {number} salvorId ID des Bergers
+         * @return {Promise<string>} Username oder 'N/A'
+         */
+        function fetchSalvorUsername(salvorId) {
+            if (!salvorId) return Promise.resolve('N/A');
+            return fetch(`/api/user/by-id/${salvorId}`)
+                .then(r => r.ok ? r.json() : null)
+                .then(data => {
+                    return data && data.username ? data.username : 'N/A';
+                })
+                .catch(() => 'N/A');
+        }
+        
+        /**
+         * Lädt aktive Bergungen (Status BERGUNG_BEVORSTEHEND)
+         * Zeigt nur die letzten 2 an
+         */
+        function loadActiveBergungen() {
+            const tbody = document.getElementById('active-bergungen-table-body');
+            if (!tbody) return;
+            
+            fetch('/api/ghostnets')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('HTTP ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(async data => {
+                    // Filtern nach BERGUNG_BEVORSTEHEND Status
+                    const activeBergungen = (data || []).filter(net => {
+                        const s = (net.status || '').toUpperCase();
+                        return s === 'BERGUNG_BEVORSTEHEND';
+                    });
+                    
+                    if (activeBergungen.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 16px; color: var(--txt-1); font-size: 12px;">Keine aktiven Bergungen</td></tr>';
+                        return;
+                    }
+                    
+                    // Nach Datum sortieren (neueste zuerst) und nur die ersten 2 nehmen
+                    const sorted = [...activeBergungen].sort((a, b) => {
+                        const dateA = parseDate(a.createdAt || a.reportedAt);
+                        const dateB = parseDate(b.createdAt || b.reportedAt);
+                        if (dateA && dateB) {
+                            return dateB.getTime() - dateA.getTime();
+                        } else if (dateA) {
+                            return -1;
+                        } else if (dateB) {
+                            return 1;
+                        }
+                        return 0;
+                    });
+                    
+                    const latest = sorted.slice(0, 2);
+                    
+                    // Berger-Usernames abrufen
+                    const salvorPromises = latest.map(net => fetchSalvorUsername(net.salvorUserId));
+                    const salvors = await Promise.all(salvorPromises);
+                    
+                    tbody.innerHTML = latest.map((net, idx) => {
+                        const location = formatLocationForBergungen(net);
+                        const salvor = salvors[idx] || 'N/A';
+                        
+                        return `
+                            <tr style="border-bottom: 1px solid rgba(148, 163, 184, 0.08);">
+                                <td style="padding: 10px 4px; color: var(--txt-0); font-size: 12px;">#${net.id || 'N/A'}</td>
+                                <td style="padding: 10px 4px; color: var(--txt-1); font-size: 12px;">${location}</td>
+                                <td style="padding: 10px 4px; color: var(--txt-1); font-size: 12px;">${salvor}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                })
+                .catch(error => {
+                    console.error('Error loading active bergungen:', error);
+                    const tbody = document.getElementById('active-bergungen-table-body');
+                    if (tbody) {
+                        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 16px; color: var(--txt-1); font-size: 12px;">Fehler beim Laden</td></tr>';
+                    }
+                });
+        }
+        
+        function formatLocationForBergungen(net) {
+            if (net && net.latitude != null && net.longitude != null) {
+                return `${Number(net.latitude).toFixed(6)}, ${Number(net.longitude).toFixed(6)}`;
+            }
+            if (net && net.location && net.location.trim() !== '') return net.location;
+            return 'N/A';
+        }
+        
+        // Load latest ghost nets
+        loadLatestGhostNets();
+        
+        // Load active bergungen
+        loadActiveBergungen();
+    })();
+</script>
+

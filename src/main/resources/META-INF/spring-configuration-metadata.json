@@ -1,0 +1,11 @@
+{
+  "properties": [
+    {
+      "name": "google.maps.api.key",
+      "type": "java.lang.String",
+      "description": "Google Maps API Key für die Karten-Funktionalität",
+      "sourceType": "com.ghostnet.store.controller.ConfigController"
+    }
+  ]
+}
+

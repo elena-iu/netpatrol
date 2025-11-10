@@ -36,7 +36,6 @@ NetPatrol ist eine Plattform, die Taucher:innen, Fischer:innen und Küstenbewohn
 - **Datenbank**: MySQL 8.0
 - **Sicherheit**: Spring Security
 - **Persistence**: Spring Data JPA / Hibernate
-- **Templates**: Thymeleaf
 - **Build Tool**: Maven
 - **Weitere Dependencies**:
   - Lombok

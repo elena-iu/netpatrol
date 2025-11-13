@@ -1,54 +1,54 @@
 <!-- Meine Netze Content: Übersicht über gemeldete und zugewiesene Geisternetze -->
-<div class="section" style="margin-top: -64px;">
+<div class="section section-negative-margin">
     <!-- Erste Tabelle: Gemeldete Netze -->
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px;">
-        <div style="flex: 1;">
-            <h2 style="margin-bottom: 8px;">Gemeldete Netze</h2>
-            <p class="muted" style="margin: 0;">Übersicht über alle von dir gemeldeten Geisternetze.</p>
+    <div class="section-header">
+        <div class="section-header-content">
+            <h2>Gemeldete Netze</h2>
+            <p class="muted">Übersicht über alle von dir gemeldeten Geisternetze.</p>
         </div>
         <!-- Filter Button: Öffnet/schließt Filter-Panel -->
-        <button id="filter-toggle-btn" class="btn-filter" onclick="toggleFilterPanel()" style="margin-left: 16px; margin-top: 20px;">
+        <button id="filter-toggle-btn" class="btn-filter filter-toggle-btn" onclick="toggleFilterPanel()">
             <span class="material-symbols-rounded" id="filter-icon">filter_list</span>
             <span id="filter-text">Filter</span>
         </button>
     </div>
     
     <!-- Filter Panel: Filter-Optionen für Größe, Status und Zeit -->
-    <div id="filter-panel" style="display: none; background: var(--bg-2); border-radius: 12px; padding: 20px; margin-bottom: 24px; border: 1px solid rgba(148, 163, 184, 0.12);">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+    <div id="filter-panel" class="filter-panel">
+        <div class="filter-panel-grid">
             <!-- Größe Filter -->
             <div>
-                <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--txt-0);">Größe</label>
-                <div style="display: flex; gap: 12px; align-items: center;">
-                    <input type="number" id="filter-size-min" placeholder="Min" style="flex: 1; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(148, 163, 184, 0.16); background: var(--bg-1); color: var(--txt-0); font-size: 14px;">
-                    <span style="color: var(--txt-1);">-</span>
-                    <input type="number" id="filter-size-max" placeholder="Max" style="flex: 1; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(148, 163, 184, 0.16); background: var(--bg-1); color: var(--txt-0); font-size: 14px;">
+                <label class="filter-label">Größe</label>
+                <div class="filter-input-group">
+                    <input type="number" id="filter-size-min" placeholder="Min" class="filter-input">
+                    <span class="filter-separator">-</span>
+                    <input type="number" id="filter-size-max" placeholder="Max" class="filter-input">
                 </div>
             </div>
             
             <!-- Status Filter -->
             <div>
-                <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--txt-0);">Status</label>
-                <div style="display: flex; flex-direction: column; gap: 8px;">
-                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                        <input type="checkbox" id="filter-status-gemeldet" checked style="width: 18px; height: 18px; cursor: pointer;">
-                        <span style="color: var(--txt-0); font-size: 14px;">GEMELDET</span>
+                <label class="filter-label">Status</label>
+                <div class="filter-checkbox-group">
+                    <label class="filter-checkbox-label">
+                        <input type="checkbox" id="filter-status-gemeldet" checked class="filter-checkbox">
+                        <span class="filter-checkbox-text">GEMELDET</span>
                     </label>
-                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                        <input type="checkbox" id="filter-status-bergung" checked style="width: 18px; height: 18px; cursor: pointer;">
-                        <span style="color: var(--txt-0); font-size: 14px;">BERGUNG_BEVORSTEHEND</span>
+                    <label class="filter-checkbox-label">
+                        <input type="checkbox" id="filter-status-bergung" checked class="filter-checkbox">
+                        <span class="filter-checkbox-text">BERGUNG_BEVORSTEHEND</span>
                     </label>
-                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                        <input type="checkbox" id="filter-status-verschollen" checked style="width: 18px; height: 18px; cursor: pointer;">
-                        <span style="color: var(--txt-0); font-size: 14px;">VERSCHOLLEN</span>
+                    <label class="filter-checkbox-label">
+                        <input type="checkbox" id="filter-status-verschollen" checked class="filter-checkbox">
+                        <span class="filter-checkbox-text">VERSCHOLLEN</span>
                     </label>
                 </div>
             </div>
             
             <!-- Zeit Filter -->
             <div>
-                <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--txt-0);">Gemeldet am</label>
-                <select id="filter-time" style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(148, 163, 184, 0.16); background: var(--bg-1); color: var(--txt-0); font-size: 14px; cursor: pointer;">
+                <label class="filter-label">Gemeldet am</label>
+                <select id="filter-time" class="filter-select">
                     <option value="all">Alle</option>
                     <option value="today">Heute</option>
                     <option value="7days">Letzte 7 Tage</option>
@@ -56,37 +56,37 @@
                 </select>
             </div>
         </div>
-        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 16px;">
-            <button type="button" class="btn btn-secondary" onclick="resetFilters()" style="padding: 10px 20px; font-size: 14px;">Zurücksetzen</button>
+        <div class="filter-actions">
+            <button type="button" class="btn btn-secondary filter-reset-btn" onclick="resetFilters()">Zurücksetzen</button>
         </div>
     </div>
     
     <!-- Tabelle: Gemeldete Netze mit Sortier- und Filterfunktionen -->
-    <div style="margin-top: 6px;">
+    <div class="table-container">
         <table class="ghostnet-table">
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Standort</th>
                     <!-- Sortierbare Spalte: Größe -->
-                    <th class="sortable" onclick="sortTable('size')" style="cursor: pointer; user-select: none;">
+                    <th class="sortable sortable-header" onclick="sortTable('size')">
                         Größe
-                        <span class="sort-icon" id="sort-icon-size" style="margin-left: 6px; font-size: 16px; opacity: 0.5;">
-                            <span class="material-symbols-rounded" style="font-size: 16px;">unfold_more</span>
+                        <span class="sort-icon" id="sort-icon-size">
+                            <span class="material-symbols-rounded">unfold_more</span>
                         </span>
                     </th>
                     <!-- Sortierbare Spalte: Status -->
-                    <th class="sortable" onclick="sortTable('status')" style="cursor: pointer; user-select: none;">
+                    <th class="sortable sortable-header" onclick="sortTable('status')">
                         Status
-                        <span class="sort-icon" id="sort-icon-status" style="margin-left: 6px; font-size: 16px; opacity: 0.5;">
-                            <span class="material-symbols-rounded" style="font-size: 16px;">unfold_more</span>
+                        <span class="sort-icon" id="sort-icon-status">
+                            <span class="material-symbols-rounded">unfold_more</span>
                         </span>
                     </th>
                     <!-- Sortierbare Spalte: Gemeldet am (Standard-Sortierung: absteigend) -->
-                    <th class="sortable" onclick="sortTable('date')" style="cursor: pointer; user-select: none;">
+                    <th class="sortable sortable-header" onclick="sortTable('date')">
                         Gemeldet am
-                        <span class="sort-icon" id="sort-icon-date" style="margin-left: 6px; font-size: 16px;">
-                            <span class="material-symbols-rounded" style="font-size: 16px;">arrow_downward</span>
+                        <span class="sort-icon" id="sort-icon-date">
+                            <span class="material-symbols-rounded">arrow_downward</span>
                         </span>
                     </th>
                     <!-- Aktionen-Spalte: Löschen-Button -->
@@ -95,7 +95,7 @@
             </thead>
             <tbody id="reported-table-body">
                 <tr>
-                    <td colspan="6" style="text-align: center; padding: 24px;">
+                    <td colspan="6" class="table-empty-cell">
                         <p class="muted">Laden...</p>
                     </td>
                 </tr>
@@ -104,49 +104,49 @@
     </div>
     
     <!-- Zweite Tabelle: Zu bergende Netze -->
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-top: 48px; margin-bottom: 24px;">
-        <div style="flex: 1;">
-            <h2 style="margin-bottom: 8px;">Zu bergende Netze</h2>
-            <p class="muted" style="margin: 0;">Übersicht über alle Geisternetze, die dir zur Bergung zugewiesen wurden.</p>
+    <div class="section-header section-spacer">
+        <div class="section-header-content">
+            <h2>Zu bergende Netze</h2>
+            <p class="muted">Übersicht über alle Geisternetze, die dir zur Bergung zugewiesen wurden.</p>
         </div>
-        <button id="filter-toggle-btn-assigned" class="btn-filter" onclick="toggleFilterPanelAssigned()" style="margin-left: 16px; margin-top: 20px;">
+        <button id="filter-toggle-btn-assigned" class="btn-filter filter-toggle-btn" onclick="toggleFilterPanelAssigned()">
             <span class="material-symbols-rounded" id="filter-icon-assigned">filter_list</span>
             <span id="filter-text-assigned">Filter</span>
         </button>
     </div>
     
     <!-- Filter Panel for Assigned Nets -->
-    <div id="filter-panel-assigned" style="display: none; background: var(--bg-2); border-radius: 12px; padding: 20px; margin-bottom: 24px; border: 1px solid rgba(148, 163, 184, 0.12);">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+    <div id="filter-panel-assigned" class="filter-panel">
+        <div class="filter-panel-grid">
             <!-- Größe Filter -->
             <div>
-                <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--txt-0);">Größe</label>
-                <div style="display: flex; gap: 12px; align-items: center;">
-                    <input type="number" id="filter-size-min-assigned" placeholder="Min" style="flex: 1; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(148, 163, 184, 0.16); background: var(--bg-1); color: var(--txt-0); font-size: 14px;">
-                    <span style="color: var(--txt-1);">-</span>
-                    <input type="number" id="filter-size-max-assigned" placeholder="Max" style="flex: 1; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(148, 163, 184, 0.16); background: var(--bg-1); color: var(--txt-0); font-size: 14px;">
+                <label class="filter-label">Größe</label>
+                <div class="filter-input-group">
+                    <input type="number" id="filter-size-min-assigned" placeholder="Min" class="filter-input">
+                    <span class="filter-separator">-</span>
+                    <input type="number" id="filter-size-max-assigned" placeholder="Max" class="filter-input">
                 </div>
             </div>
             
             <!-- Status Filter -->
             <div>
-                <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--txt-0);">Status</label>
-                <div style="display: flex; flex-direction: column; gap: 8px;">
-                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                        <input type="checkbox" id="filter-status-bergung-assigned" checked style="width: 18px; height: 18px; cursor: pointer;">
-                        <span style="color: var(--txt-0); font-size: 14px;">BERGUNG_BEVORSTEHEND</span>
+                <label class="filter-label">Status</label>
+                <div class="filter-checkbox-group">
+                    <label class="filter-checkbox-label">
+                        <input type="checkbox" id="filter-status-bergung-assigned" checked class="filter-checkbox">
+                        <span class="filter-checkbox-text">BERGUNG_BEVORSTEHEND</span>
                     </label>
-                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                        <input type="checkbox" id="filter-status-geborgen-assigned" checked style="width: 18px; height: 18px; cursor: pointer;">
-                        <span style="color: var(--txt-0); font-size: 14px;">GEBORGEN</span>
+                    <label class="filter-checkbox-label">
+                        <input type="checkbox" id="filter-status-geborgen-assigned" checked class="filter-checkbox">
+                        <span class="filter-checkbox-text">GEBORGEN</span>
                     </label>
                 </div>
             </div>
             
             <!-- Zeit Filter -->
             <div>
-                <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--txt-0);">Zugewiesen am</label>
-                <select id="filter-time-assigned" style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(148, 163, 184, 0.16); background: var(--bg-1); color: var(--txt-0); font-size: 14px; cursor: pointer;">
+                <label class="filter-label">Zugewiesen am</label>
+                <select id="filter-time-assigned" class="filter-select">
                     <option value="all">Alle</option>
                     <option value="today">Heute</option>
                     <option value="7days">Letzte 7 Tage</option>
@@ -154,33 +154,33 @@
                 </select>
             </div>
         </div>
-        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 16px;">
-            <button type="button" class="btn btn-secondary" onclick="resetFiltersAssigned()" style="padding: 10px 20px; font-size: 14px;">Zurücksetzen</button>
+        <div class="filter-actions">
+            <button type="button" class="btn btn-secondary filter-reset-btn" onclick="resetFiltersAssigned()">Zurücksetzen</button>
         </div>
     </div>
     
-    <div style="margin-top: 6px;">
+    <div class="table-container">
         <table class="ghostnet-table">
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Standort</th>
-                    <th class="sortable" onclick="sortTableAssigned('size')" style="cursor: pointer; user-select: none;">
+                    <th class="sortable sortable-header" onclick="sortTableAssigned('size')">
                         Größe
-                        <span class="sort-icon" id="sort-icon-size-assigned" style="margin-left: 6px; font-size: 16px; opacity: 0.5;">
-                            <span class="material-symbols-rounded" style="font-size: 16px;">unfold_more</span>
+                        <span class="sort-icon" id="sort-icon-size-assigned">
+                            <span class="material-symbols-rounded">unfold_more</span>
                         </span>
                     </th>
-                    <th class="sortable" onclick="sortTableAssigned('status')" style="cursor: pointer; user-select: none;">
+                    <th class="sortable sortable-header" onclick="sortTableAssigned('status')">
                         Status
-                        <span class="sort-icon" id="sort-icon-status-assigned" style="margin-left: 6px; font-size: 16px; opacity: 0.5;">
-                            <span class="material-symbols-rounded" style="font-size: 16px;">unfold_more</span>
+                        <span class="sort-icon" id="sort-icon-status-assigned">
+                            <span class="material-symbols-rounded">unfold_more</span>
                         </span>
                     </th>
-                    <th class="sortable" onclick="sortTableAssigned('date')" style="cursor: pointer; user-select: none;">
+                    <th class="sortable sortable-header" onclick="sortTableAssigned('date')">
                         Zugewiesen am
-                        <span class="sort-icon" id="sort-icon-date-assigned" style="margin-left: 6px; font-size: 16px;">
-                            <span class="material-symbols-rounded" style="font-size: 16px;">arrow_downward</span>
+                        <span class="sort-icon" id="sort-icon-date-assigned">
+                            <span class="material-symbols-rounded">arrow_downward</span>
                         </span>
                     </th>
                     <th></th>
@@ -188,7 +188,7 @@
             </thead>
             <tbody id="assigned-table-body">
                 <tr>
-                    <td colspan="6" style="text-align: center; padding: 24px;">
+                    <td colspan="6" class="table-empty-cell">
                         <p class="muted">Laden...</p>
                     </td>
                 </tr>
@@ -262,40 +262,40 @@
             return 'unknown';
         }
         
-        // Store all reported nets for filtering
+        // Alle gemeldeten Netze für Filterung speichern
         let allReportedNets = [];
         
-        // Store all assigned nets for filtering
+        // Alle zu bergenden Netze für Filterung speichern
         let allAssignedNets = [];
         
-        // Sorting state for reported nets
+        // Sortierungs-Status für gemeldete Netze
         let currentSortColumn = 'date'; // Default: Gemeldet am
         let currentSortDirection = 'desc'; // Default: descending
         
-        // Sorting state for assigned nets
+        // Sortierungs-Status für zu bergende Netze
         let currentSortColumnAssigned = 'date'; // Default: Zugewiesen am
         let currentSortDirectionAssigned = 'desc'; // Default: descending
         
-        // Sort functions
+        // Sortierungs-Funktionen
         function sortTable(column) {
-            // If clicking the same column, toggle direction
+            // Wenn derselbe Spalten-Kopf geklickt wird, Richtung umkehren
             if (currentSortColumn === column) {
                 currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
             } else {
-                // New column, default to ascending
+                // Neue Spalte, Standard: aufsteigend
                 currentSortColumn = column;
                 currentSortDirection = 'asc';
             }
             
-            // Update sort icons
+            // Sortierungs-Icons aktualisieren
             updateSortIcons();
             
-            // Apply sorting and filtering
+            // Sortierung und Filterung anwenden
             applyFilters();
         }
         
         function updateSortIcons() {
-            // Reset all icons
+            // Alle Icons zurücksetzen
             const icons = ['size', 'status', 'date'];
             icons.forEach(col => {
                 const iconEl = document.getElementById(`sort-icon-${col}`);
@@ -353,7 +353,7 @@
                         return 0;
                 }
                 
-                // Apply sort direction
+                // Sortierungs-Richtung anwenden
                 return currentSortDirection === 'asc' ? comparison : -comparison;
             });
             
@@ -376,10 +376,10 @@
             return null;
         }
         
-        // Filter functions
+        // Filter-Funktionen
         function extractSizeNumber(sizeStr) {
             if (!sizeStr || sizeStr.trim() === '') return null;
-            // Try to extract number from strings like "10m²", "ca. 20-30m²", "20m²", etc.
+            // Versuchen, Zahl aus Strings wie "10m²", "ca. 20-30m²", "20m²", etc. zu extrahieren
             const match = sizeStr.match(/(\d+(?:\.\d+)?)/);
             return match ? parseFloat(match[1]) : null;
         }
@@ -387,7 +387,7 @@
         function filterReportedNets(nets) {
             let filtered = [...nets];
             
-            // Filter by size
+            // Größe filtern
             const minSize = document.getElementById('filter-size-min').value;
             const maxSize = document.getElementById('filter-size-max').value;
             
@@ -405,7 +405,7 @@
                 });
             }
             
-            // Filter by status
+            // Status filtern
             const gemeldetChecked = document.getElementById('filter-status-gemeldet').checked;
             const bergungChecked = document.getElementById('filter-status-bergung').checked;
             const verschollenChecked = document.getElementById('filter-status-verschollen').checked;
@@ -420,7 +420,7 @@
                 });
             }
             
-            // Filter by time
+            // Zeit filtern
             const timeFilter = document.getElementById('filter-time').value;
             if (timeFilter !== 'all') {
                 const now = new Date();
@@ -469,7 +469,7 @@
             if (!tbody) return;
             
             if (!nets || nets.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 24px;"><p class="muted">Noch keine gemeldeten Netze vorhanden.</p></td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" class="table-empty-cell"><p class="muted">Noch keine gemeldeten Netze vorhanden.</p></td></tr>';
                 return;
             }
             
@@ -482,10 +482,10 @@
                 const estimatedSize = (net.estimatedSize && net.estimatedSize.trim() !== '') ? net.estimatedSize : 'N/A';
                 const reportedDate = formatDate(net.createdAt || net.reportedAt);
                 
-                // Delete button - enabled for GEMELDET and VERSCHOLLEN status
+                // Löschen-Button - aktiviert für GEMELDET und VERSCHOLLEN Status
                 const canDelete = statusUpper === 'GEMELDET' || statusUpper === 'VERSCHOLLEN';
                 const deleteButton = `<button class="btn-delete ${!canDelete ? 'btn-delete-disabled' : ''}" ${!canDelete ? 'disabled' : ''} onclick="${canDelete ? `openDeleteModal(${net.id})` : ''}" title="${canDelete ? 'Meldung löschen' : 'Nur für GEMELDET oder VERSCHOLLEN Status verfügbar'}">
-                        <span class="material-symbols-rounded" style="font-size: 18px;">delete</span>
+                        <span class="material-symbols-rounded">delete</span>
                         Löschen
                     </button>`;
                 
@@ -519,7 +519,7 @@
                 })
                 .catch(error => {
                     console.error('Error loading reported nets:', error);
-                    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 24px;"><p class="muted">Fehler beim Laden: ' + error.message + '</p></td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="6" class="table-empty-cell"><p class="muted">Fehler beim Laden: ' + error.message + '</p></td></tr>';
                 });
         }
         
@@ -529,14 +529,14 @@
             renderReportedTable(sorted);
         }
         
-        // Make sortTable global for onclick
+        // sortTable global für onclick
         window.sortTable = sortTable;
         
-        // Filter functions for assigned nets
+        // Filter-Funktionen für zu bergende Netze
         function filterAssignedNets(nets) {
             let filtered = [...nets];
             
-            // Filter by size
+            // Größe filtern
             const minSize = document.getElementById('filter-size-min-assigned').value;
             const maxSize = document.getElementById('filter-size-max-assigned').value;
             
@@ -554,7 +554,7 @@
                 });
             }
             
-            // Filter by status
+            // Status filtern
             const bergungChecked = document.getElementById('filter-status-bergung-assigned').checked;
             const geborgenChecked = document.getElementById('filter-status-geborgen-assigned').checked;
             
@@ -567,7 +567,7 @@
                 });
             }
             
-            // Filter by time
+            // Zeit filtern
             const timeFilter = document.getElementById('filter-time-assigned').value;
             if (timeFilter !== 'all') {
                 const now = new Date();
@@ -650,7 +650,7 @@
                         return 0;
                 }
                 
-                // Apply sort direction
+                // Sortierungs-Richtung anwenden
                 return currentSortDirectionAssigned === 'asc' ? comparison : -comparison;
             });
             
@@ -662,7 +662,7 @@
             if (!tbody) return;
             
             if (!nets || nets.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 24px;"><p class="muted">Keine Netze gefunden, die den Filterkriterien entsprechen.</p></td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" class="table-empty-cell"><p class="muted">Keine Netze gefunden, die den Filterkriterien entsprechen.</p></td></tr>';
                 return;
             }
             
@@ -673,13 +673,13 @@
                         const statusClass = getStatusClass(status);
                         const locationDisplay = formatLocation(net);
                         const estimatedSize = (net.estimatedSize && net.estimatedSize.trim() !== '') ? net.estimatedSize : 'N/A';
-                        // Use reportedAt as the assignment date (when status was changed to BERGUNG_BEVORSTEHEND)
+                        // reportedAt als Zuweisungs-Datum verwenden (wenn Status auf BERGUNG_BEVORSTEHEND geändert wurde)
                         const assignedDate = formatDate(net.reportedAt || net.createdAt);
                         
-                        // Recovery button - only enabled if not already GEBORGEN
+                        // Recovery button - nur sichtbar, wenn nicht GEBORGEN
                         const isGeborgen = statusUpper === 'GEBORGEN';
                         const recoverButton = `<button class="btn-recover ${isGeborgen ? 'btn-recover-disabled' : ''}" ${isGeborgen ? 'disabled' : ''} onclick="${!isGeborgen ? `openRecoverModal(${net.id})` : ''}" title="${!isGeborgen ? 'Bergung bestätigen' : 'Bereits geborgen'}">
-                                <span class="material-symbols-rounded" style="font-size: 18px;">check_circle</span>
+                                <span class="material-symbols-rounded">check_circle</span>
                                 Bergung bestätigen
                             </button>`;
                         
@@ -713,7 +713,7 @@
                 })
                 .catch(error => {
                     console.error('Error loading assigned nets:', error);
-                    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 24px;"><p class="muted">Fehler beim Laden: ' + error.message + '</p></td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="6" class="table-empty-cell"><p class="muted">Fehler beim Laden: ' + error.message + '</p></td></tr>';
                 });
         }
         
@@ -723,26 +723,26 @@
             renderAssignedTable(sorted);
         }
         
-        // Sort functions for assigned nets
+        // Sortierungs-Funktionen für zu bergende Netze
         function sortTableAssigned(column) {
-            // If clicking the same column, toggle direction
+            // Wenn derselbe Spalten-Kopf geklickt wird, Richtung umkehren
             if (currentSortColumnAssigned === column) {
                 currentSortDirectionAssigned = currentSortDirectionAssigned === 'asc' ? 'desc' : 'asc';
             } else {
-                // New column, default to ascending
+                // Neue Spalte, Standard: aufsteigend
                 currentSortColumnAssigned = column;
                 currentSortDirectionAssigned = 'asc';
             }
             
-            // Update sort icons
+            // Sortierungs-Icons aktualisieren
             updateSortIconsAssigned();
             
-            // Apply sorting and filtering
+            // Sortierung und Filterung anwenden
             applyFiltersAssigned();
         }
         
         function updateSortIconsAssigned() {
-            // Reset all icons
+            // Alle Icons zurücksetzen
             const icons = ['size', 'status', 'date'];
             icons.forEach(col => {
                 const iconEl = document.getElementById(`sort-icon-${col}-assigned`);
@@ -761,10 +761,10 @@
             });
         }
         
-        // Make sortTableAssigned global for onclick
+        // sortTableAssigned global für onclick
         window.sortTableAssigned = sortTableAssigned;
         
-        // Filter panel toggle
+        // Filter-Panel anzeigen/verstecken
         window.toggleFilterPanel = function() {
             const panel = document.getElementById('filter-panel');
             const icon = document.getElementById('filter-icon');
@@ -781,7 +781,7 @@
             }
         };
         
-        // Reset filters
+        // Filter zurücksetzen
         window.resetFilters = function() {
             document.getElementById('filter-size-min').value = '';
             document.getElementById('filter-size-max').value = '';
@@ -792,7 +792,7 @@
             applyFilters();
         };
         
-        // Filter panel toggle for assigned nets
+        // Filter-Panel anzeigen/verstecken für zu bergende Netze
         window.toggleFilterPanelAssigned = function() {
             const panel = document.getElementById('filter-panel-assigned');
             const icon = document.getElementById('filter-icon-assigned');
@@ -809,7 +809,7 @@
             }
         };
         
-        // Reset filters for assigned nets
+        // Filter für zu bergende Netze zurücksetzen
         window.resetFiltersAssigned = function() {
             document.getElementById('filter-size-min-assigned').value = '';
             document.getElementById('filter-size-max-assigned').value = '';
@@ -819,7 +819,7 @@
             applyFiltersAssigned();
         };
         
-        // Attach filter event listeners
+        // Filter-Event-Listener anhängen
         function attachFilterListeners() {
             const minSizeInput = document.getElementById('filter-size-min');
             const maxSizeInput = document.getElementById('filter-size-max');
@@ -836,7 +836,7 @@
             if (timeSelect) timeSelect.addEventListener('change', applyFilters);
         }
         
-        // Attach filter event listeners for assigned nets
+        // Filter-Event-Listener für zu bergende Netze anhängen
         function attachFilterListenersAssigned() {
             const minSizeInput = document.getElementById('filter-size-min-assigned');
             const maxSizeInput = document.getElementById('filter-size-max-assigned');
@@ -851,16 +851,16 @@
             if (timeSelect) timeSelect.addEventListener('change', applyFiltersAssigned);
         }
         
-        // Load both tables
+        // Beide Tabellen laden
         function loadTables() {
             loadReportedTable();
             loadAssignedTable();
         }
         
-        // Try loading immediately
+        // Versuchen, sofort zu laden
         if (document.getElementById('reported-table-body') && document.getElementById('assigned-table-body')) {
             loadTables();
-            // Attach filter listeners and update sort icons after a short delay to ensure DOM is ready
+            // Filter-Event-Listener anhängen und Sortierungs-Icons aktualisieren nach kurzer Verzögerung um DOM bereit zu machen
             setTimeout(() => {
                 attachFilterListeners();
                 attachFilterListenersAssigned();
@@ -868,7 +868,7 @@
                 updateSortIconsAssigned();
             }, 100);
         } else {
-            // Retry if table bodies not found
+            // Wiederholen, wenn Tabellen-Body nicht gefunden
             const retryInterval = setInterval(() => {
                 if (document.getElementById('reported-table-body') && document.getElementById('assigned-table-body')) {
                     loadTables();
@@ -882,13 +882,13 @@
                 }
             }, 100);
             
-            // Stop retrying after 2 seconds
+            // Nach 2 Sekunden stoppen
             setTimeout(() => clearInterval(retryInterval), 2000);
         }
         
-        // Delete modal functions
+        // Löschen-Modal-Funktionen
         window.openDeleteModal = function(ghostNetId) {
-            // Fetch ghost net details
+            // Geisternetz-Details abrufen
             fetch(`/api/ghostnets`)
                 .then(response => response.json())
                 .then(data => {
@@ -910,7 +910,7 @@
             modal.style.display = 'flex';
             modal.setAttribute('data-ghostnet-id', ghostNet.id);
             
-            // Format location
+            // Standort formatieren
             let locationDisplay = 'N/A';
             if (ghostNet.latitude !== null && ghostNet.latitude !== undefined && 
                 ghostNet.longitude !== null && ghostNet.longitude !== undefined) {
@@ -919,10 +919,10 @@
                 locationDisplay = ghostNet.location;
             }
             
-            // Format size
+            // Größe formatieren
             const estimatedSize = (ghostNet.estimatedSize && ghostNet.estimatedSize.trim() !== '') ? ghostNet.estimatedSize : 'N/A';
             
-            // Update modal content
+            // Modal-Inhalt aktualisieren
             const modalContent = modal.querySelector('.modal-content');
             modalContent.innerHTML = `
                 <div class="modal-header">
@@ -931,22 +931,20 @@
                         <span class="material-symbols-rounded">close</span>
                     </button>
                 </div>
-                <div style="padding: 24px;">
-                    <p style="color: var(--txt-1); margin-bottom: 16px;">Möchten Sie diese Meldung wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.</p>
-                    <div style="background: var(--bg-2); padding: 16px; border-radius: 10px; margin-bottom: 16px;">
-                        <div style="display: flex; flex-direction: column; gap: 8px;">
-                            <div style="display: flex; gap: 12px;">
-                                <strong style="color: var(--txt-0); min-width: 80px;">ID:</strong>
-                                <span style="color: var(--txt-1);">#${ghostNet.id || 'N/A'}</span>
-                            </div>
-                            <div style="display: flex; gap: 12px;">
-                                <strong style="color: var(--txt-0); min-width: 80px;">Standort:</strong>
-                                <span style="color: var(--txt-1);">${locationDisplay}</span>
-                            </div>
-                            <div style="display: flex; gap: 12px;">
-                                <strong style="color: var(--txt-0); min-width: 80px;">Größe:</strong>
-                                <span style="color: var(--txt-1);">${estimatedSize}</span>
-                            </div>
+                <div class="modal-body">
+                    <p class="modal-text">Möchten Sie diese Meldung wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.</p>
+                    <div class="modal-info-box">
+                        <div class="modal-info-row">
+                            <strong class="modal-info-label">ID:</strong>
+                            <span class="modal-info-value">#${ghostNet.id || 'N/A'}</span>
+                        </div>
+                        <div class="modal-info-row">
+                            <strong class="modal-info-label">Standort:</strong>
+                            <span class="modal-info-value">${locationDisplay}</span>
+                        </div>
+                        <div class="modal-info-row">
+                            <strong class="modal-info-label">Größe:</strong>
+                            <span class="modal-info-value">${estimatedSize}</span>
                         </div>
                     </div>
                     <div class="form-actions">
@@ -966,12 +964,12 @@
             const ghostNetId = document.getElementById('delete-confirm-modal').getAttribute('data-ghostnet-id');
             if (!ghostNetId) return;
             
-            // Show loading state
+            // Lade-Status anzeigen
             const modalContent = document.querySelector('#delete-confirm-modal .modal-content');
             modalContent.innerHTML = `
-                <div style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px; padding:48px 24px;">
-                    <div style="width: 40px; height: 40px; border: 4px solid var(--brand); border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
-                    <p style="margin:0; color:var(--txt-1); font-size:14px;">Wird gelöscht...</p>
+                <div class="modal-loading">
+                    <div class="spinner"></div>
+                    <p>Wird gelöscht...</p>
                 </div>
             `;
             
@@ -987,19 +985,19 @@
                 return response;
             })
             .then(() => {
-                // Show success message
+                // Erfolgsmeldung anzeigen
                 modalContent.innerHTML = `
-                    <div style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px; padding:48px 24px;">
-                        <span class="material-symbols-rounded" style="font-size:54px; color:#22c55e;">check_circle</span>
-                        <h2 style="margin:0; font-size:24px; font-weight:700; color:var(--txt-0);">Erfolgreich gelöscht!</h2>
-                        <p style="margin:0; color:var(--txt-1); font-size:14px;">Die Meldung wurde gelöscht.</p>
+                    <div class="modal-success">
+                        <span class="material-symbols-rounded modal-success-icon">check_circle</span>
+                        <h2 class="modal-success-title">Erfolgreich gelöscht!</h2>
+                        <p class="modal-success-text">Die Meldung wurde gelöscht.</p>
                     </div>
                 `;
                 
-                // Close modal and reload after delay
+                // Modal schließen und neu laden nach Verzögerung
                 setTimeout(() => {
                     window.closeDeleteModal();
-                    loadReportedTable(); // This will reload and apply current filters
+                    loadReportedTable(); // neu laden und aktuelle Filter anwenden
                 }, 2000);
             })
             .catch(error => {
@@ -1011,8 +1009,8 @@
                             <span class="material-symbols-rounded">close</span>
                         </button>
                     </div>
-                    <div style="padding: 24px;">
-                        <p style="color: var(--txt-1); margin-bottom: 16px;">Fehler beim Löschen: ${error.message}</p>
+                    <div class="modal-body">
+                        <p class="modal-text">Fehler beim Löschen: ${error.message}</p>
                         <div class="form-actions">
                             <button type="button" class="btn btn-primary" onclick="window.closeDeleteModal()">Schließen</button>
                         </div>
@@ -1021,9 +1019,9 @@
             });
         };
         
-        // Recovery modal functions
+        // Recovery-Modal-Funktionen
         window.openRecoverModal = function(ghostNetId) {
-            // Fetch ghost net details
+            // Geisternetz-Details abrufen
             fetch(`/api/ghostnets`)
                 .then(response => response.json())
                 .then(data => {
@@ -1045,7 +1043,7 @@
             modal.style.display = 'flex';
             modal.setAttribute('data-ghostnet-id', ghostNet.id);
             
-            // Format location
+            // Standort formatieren
             let locationDisplay = 'N/A';
             if (ghostNet.latitude !== null && ghostNet.latitude !== undefined && 
                 ghostNet.longitude !== null && ghostNet.longitude !== undefined) {
@@ -1054,10 +1052,10 @@
                 locationDisplay = ghostNet.location;
             }
             
-            // Format size
+            // Größe formatieren
             const estimatedSize = (ghostNet.estimatedSize && ghostNet.estimatedSize.trim() !== '') ? ghostNet.estimatedSize : 'N/A';
             
-            // Update modal content
+            // Modal-Inhalt aktualisieren
             const modalContent = modal.querySelector('.modal-content');
             modalContent.innerHTML = `
                 <div class="modal-header">
@@ -1066,25 +1064,23 @@
                         <span class="material-symbols-rounded">close</span>
                     </button>
                 </div>
-                <div style="padding: 24px;">
-                    <p style="color: var(--txt-1); margin-bottom: 16px;">Möchten Sie die Bergung dieses Geisternetzes bestätigen?</p>
-                    <div style="background: var(--bg-2); padding: 16px; border-radius: 10px; margin-bottom: 16px;">
-                        <div style="display: flex; flex-direction: column; gap: 8px;">
-                            <div style="display: flex; gap: 12px;">
-                                <strong style="color: var(--txt-0); min-width: 80px;">ID:</strong>
-                                <span style="color: var(--txt-1);">#${ghostNet.id || 'N/A'}</span>
-                            </div>
-                            <div style="display: flex; gap: 12px;">
-                                <strong style="color: var(--txt-0); min-width: 80px;">Standort:</strong>
-                                <span style="color: var(--txt-1);">${locationDisplay}</span>
-                            </div>
-                            <div style="display: flex; gap: 12px;">
-                                <strong style="color: var(--txt-0); min-width: 80px;">Größe:</strong>
-                                <span style="color: var(--txt-1);">${estimatedSize}</span>
-                            </div>
+                <div class="modal-body">
+                    <p class="modal-text">Möchten Sie die Bergung dieses Geisternetzes bestätigen?</p>
+                    <div class="modal-info-box">
+                        <div class="modal-info-row">
+                            <strong class="modal-info-label">ID:</strong>
+                            <span class="modal-info-value">#${ghostNet.id || 'N/A'}</span>
+                        </div>
+                        <div class="modal-info-row">
+                            <strong class="modal-info-label">Standort:</strong>
+                            <span class="modal-info-value">${locationDisplay}</span>
+                        </div>
+                        <div class="modal-info-row">
+                            <strong class="modal-info-label">Größe:</strong>
+                            <span class="modal-info-value">${estimatedSize}</span>
                         </div>
                     </div>
-                    <p style="color: var(--txt-1); margin-bottom: 24px;">Der Status wird auf "Geborgen" gesetzt.</p>
+                    <p class="modal-text modal-text-spacing">Der Status wird auf "Geborgen" gesetzt.</p>
                     <div class="form-actions">
                         <button type="button" class="btn btn-secondary" onclick="window.closeRecoverModal()">Abbrechen</button>
                         <button type="button" class="btn btn-primary" onclick="window.confirmRecover()">Bestätigen</button>
@@ -1102,12 +1098,12 @@
             const ghostNetId = document.getElementById('recover-confirm-modal').getAttribute('data-ghostnet-id');
             if (!ghostNetId) return;
             
-            // Show loading state
+            // Lade-Status anzeigen
             const modalContent = document.querySelector('#recover-confirm-modal .modal-content');
             modalContent.innerHTML = `
-                <div style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px; padding:48px 24px;">
-                    <div style="width: 40px; height: 40px; border: 4px solid var(--brand); border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
-                    <p style="margin:0; color:var(--txt-1); font-size:14px;">Wird bestätigt...</p>
+                <div class="modal-loading">
+                    <div class="spinner"></div>
+                    <p>Wird bestätigt...</p>
                 </div>
             `;
             
@@ -1126,19 +1122,19 @@
                 return response.json();
             })
             .then(data => {
-                // Show success message
+                // Erfolgsmeldung anzeigen
                 modalContent.innerHTML = `
-                    <div style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px; padding:48px 24px;">
-                        <span class="material-symbols-rounded" style="font-size:54px; color:#22c55e;">check_circle</span>
-                        <h2 style="margin:0; font-size:24px; font-weight:700; color:var(--txt-0);">Bergung bestätigt!</h2>
-                        <p style="margin:0; color:var(--txt-1); font-size:14px;">Das Geisternetz wurde als geborgen markiert.</p>
+                    <div class="modal-success">
+                        <span class="material-symbols-rounded modal-success-icon">check_circle</span>
+                        <h2 class="modal-success-title">Bergung bestätigt!</h2>
+                        <p class="modal-success-text">Das Geisternetz wurde als geborgen markiert.</p>
                     </div>
                 `;
                 
-                // Close modal and reload after delay
+                // Modal schließen und neu laden nach Verzögerung
                 setTimeout(() => {
                     window.closeRecoverModal();
-                    loadAssignedTable(); // This will reload and apply current filters
+                    loadAssignedTable(); // neu laden und aktuelle Filter anwenden
                 }, 2000);
             })
             .catch(error => {
@@ -1150,8 +1146,8 @@
                             <span class="material-symbols-rounded">close</span>
                         </button>
                     </div>
-                    <div style="padding: 24px;">
-                        <p style="color: var(--txt-1); margin-bottom: 16px;">Fehler beim Bestätigen: ${error.message}</p>
+                    <div class="modal-body">
+                        <p class="modal-text">Fehler beim Bestätigen: ${error.message}</p>
                         <div class="form-actions">
                             <button type="button" class="btn btn-primary" onclick="window.closeRecoverModal()">Schließen</button>
                         </div>
@@ -1162,124 +1158,22 @@
     })();
 </script>
 
-<!-- Delete Confirmation Modal -->
+<!-- Löschen-Bestätigungs-Modal -->
 <div id="delete-confirm-modal" class="modal-overlay" style="display: none;">
     <div class="modal-content">
-        <!-- Content will be dynamically inserted -->
+        <!-- Inhalt wird dynamisch eingefügt -->
     </div>
 </div>
 
-<!-- Recovery Confirmation Modal -->
+<!-- Bergung-Bestätigungs-Modal -->
 <div id="recover-confirm-modal" class="modal-overlay" style="display: none;">
     <div class="modal-content">
-        <!-- Content will be dynamically inserted -->
+        <!-- Inhalt wird dynamisch eingefügt -->
     </div>
 </div>
 
-<style>
-    @keyframes spin {
-        to { transform: rotate(360deg); }
-    }
-    
-    /* Delete Button */
-    .btn-delete {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 8px 14px;
-        border-radius: 8px;
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        color: white;
-        font-weight: 600;
-        font-size: 13px;
-        border: none;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
-    }
-    
-    .btn-delete:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35);
-    }
-    
-    .btn-delete:active {
-        transform: translateY(0);
-    }
-    
-    .btn-delete .material-symbols-rounded {
-        font-size: 18px;
-    }
-    
-    .btn-delete-disabled {
-        opacity: 0.5;
-        cursor: not-allowed !important;
-        background: rgba(148, 163, 184, 0.2) !important;
-        color: rgba(148, 163, 184, 0.8) !important;
-        box-shadow: none !important;
-    }
-    
-    .btn-delete-disabled:hover {
-        transform: none !important;
-        box-shadow: none !important;
-    }
-    
-    /* Recovery Button */
-    .btn-recover {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 8px 14px;
-        border-radius: 8px;
-        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-        color: white;
-        font-weight: 600;
-        font-size: 13px;
-        border: none;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
-    }
-    
-    .btn-recover:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 6px 16px rgba(34, 197, 94, 0.35);
-    }
-    
-    .btn-recover:active {
-        transform: translateY(0);
-    }
-    
-    .btn-recover .material-symbols-rounded {
-        font-size: 18px;
-    }
-    
-    .btn-recover-disabled {
-        opacity: 0.5;
-        cursor: not-allowed !important;
-        background: rgba(148, 163, 184, 0.2) !important;
-        color: rgba(148, 163, 184, 0.8) !important;
-        box-shadow: none !important;
-    }
-    
-    .btn-recover-disabled:hover {
-        transform: none !important;
-        box-shadow: none !important;
-    }
-    
-    /* Danger button */
-    .btn-danger {
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        color: white;
-    }
-    
-    .btn-danger:hover {
-        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-    }
-</style>
-
 <script>
-    // Close modals when clicking outside
+    // Modal schließen, wenn außerhalb des Modals geklickt wird
     document.getElementById('delete-confirm-modal').addEventListener('click', function(e) {
         if (e.target === this) {
             window.closeDeleteModal();

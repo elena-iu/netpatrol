@@ -103,7 +103,7 @@ header {
     box-shadow: 0 10px 30px rgba(59,130,246,.35); 
 }
 
-/* Hero section (index.html) */
+/* Hero-Section (index.html) */
 .hero { 
     padding: 96px 0 72px; 
     position: relative; 
@@ -170,7 +170,7 @@ header {
     box-shadow: 0 12px 40px rgba(139,92,246,.35); 
 }
 
-/* Decorative background shapes in hero */
+/* Dekorative Hintergrund-Formen in Hero-Section */
 .bg-shapes { 
     position: absolute; 
     inset: 0; 
@@ -682,7 +682,7 @@ body.dashboard-layout {
     margin: 0;
 }
 
-/* Ghost Net Table */
+/* Geisternetz-Tabelle */
 .ghostnet-table {
     width: 100%;
     border-collapse: collapse;
@@ -838,7 +838,7 @@ body.dashboard-layout {
     box-sizing: border-box;
 }
 
-/* Remove number input spinners */
+/* input spinner entfernen*/
 .form-group input[type="number"]::-webkit-inner-spin-button,
 .form-group input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -912,7 +912,7 @@ body.dashboard-layout {
     margin-bottom: 16px;
 }
 
-/* Assignment Button */
+/* Zuweisungs-Button */
 .btn-assign {
     display: inline-flex;
     align-items: center;
@@ -942,7 +942,7 @@ body.dashboard-layout {
     font-size: 18px;
 }
 
-/* Danger button variant */
+/* Danger-Button Variante */
 .btn-danger {
     background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
     color: white;
@@ -954,7 +954,7 @@ body.dashboard-layout {
     box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35);
 }
 
-/* Disabled assignment button */
+/* Deaktivierter Zuweisungs-Button */
 .btn-assign-disabled {
     opacity: 0.5;
     cursor: not-allowed !important;
@@ -968,7 +968,7 @@ body.dashboard-layout {
     box-shadow: none !important;
 }
 
-/* Narrow action column */
+/* Schmale Aktion-Spalte */
 .ghostnet-table th:last-child,
 .ghostnet-table td:last-child {
     width: 160px;
@@ -1016,7 +1016,7 @@ body.dashboard-layout {
     color: var(--brand-2);
 }
 
-/* Toggle Map Button */
+/* Karte anzeigen/verstecken-Button */
 .btn-toggle-map {
     display: inline-flex;
     align-items: center;
@@ -1068,7 +1068,7 @@ body.dashboard-layout {
     font-size: 20px;
 }
 
-/* Sortable table headers */
+/* Sortierbare Tabellen-Header */
 .sortable {
     transition: background-color 0.2s ease;
     position: relative;
@@ -1234,5 +1234,340 @@ body.error-page {
 .btn-secondary-error:hover {
     background: var(--bg-1);
     border-color: rgba(148, 163, 184, 0.24);
+}
+
+/* Meine Netze Seite Styles */
+.section-negative-margin {
+    margin-top: -64px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+}
+
+.section-header-content {
+    flex: 1;
+}
+
+.section-header h2 {
+    margin-bottom: 8px;
+}
+
+.section-header p.muted {
+    margin: 0;
+}
+
+.filter-toggle-btn {
+    margin-left: 16px;
+    margin-top: 20px;
+}
+
+.filter-panel {
+    display: none;
+    background: var(--bg-2);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.filter-panel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.filter-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--txt-0);
+}
+
+.filter-input-group {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.filter-input {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    background: var(--bg-1);
+    color: var(--txt-0);
+    font-size: 14px;
+}
+
+.filter-separator {
+    color: var(--txt-1);
+}
+
+.filter-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.filter-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.filter-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.filter-checkbox-text {
+    color: var(--txt-0);
+    font-size: 14px;
+}
+
+.filter-select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    background: var(--bg-1);
+    color: var(--txt-0);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.filter-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.filter-reset-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+}
+
+.table-container {
+    margin-top: 6px;
+}
+
+.sortable-header {
+    cursor: pointer;
+    user-select: none;
+}
+
+.sort-icon {
+    margin-left: 6px;
+    font-size: 16px;
+    opacity: 0.5;
+}
+
+.sort-icon .material-symbols-rounded {
+    font-size: 16px;
+}
+
+.table-empty-cell {
+    text-align: center;
+    padding: 24px;
+}
+
+.section-spacer {
+    margin-top: 48px;
+}
+
+/* Delete Button */
+.btn-delete {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    font-weight: 600;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+}
+
+.btn-delete:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35);
+}
+
+.btn-delete:active {
+    transform: translateY(0);
+}
+
+.btn-delete .material-symbols-rounded {
+    font-size: 18px;
+}
+
+.btn-delete-disabled {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+    background: rgba(148, 163, 184, 0.2) !important;
+    color: rgba(148, 163, 184, 0.8) !important;
+    box-shadow: none !important;
+}
+
+.btn-delete-disabled:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Recovery Button */
+.btn-recover {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    color: white;
+    font-weight: 600;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
+}
+
+.btn-recover:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(34, 197, 94, 0.35);
+}
+
+.btn-recover:active {
+    transform: translateY(0);
+}
+
+.btn-recover .material-symbols-rounded {
+    font-size: 18px;
+}
+
+.btn-recover-disabled {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+    background: rgba(148, 163, 184, 0.2) !important;
+    color: rgba(148, 163, 184, 0.8) !important;
+    box-shadow: none !important;
+}
+
+.btn-recover-disabled:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Danger button */
+.btn-danger {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Modal Styles for Meine Netze */
+.modal-body {
+    padding: 24px;
+}
+
+.modal-text {
+    color: var(--txt-1);
+    margin-bottom: 16px;
+}
+
+.modal-text-spacing {
+    margin-bottom: 24px;
+}
+
+.modal-info-box {
+    background: var(--bg-2);
+    padding: 16px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.modal-info-row {
+    display: flex;
+    gap: 12px;
+}
+
+.modal-info-label {
+    color: var(--txt-0);
+    min-width: 80px;
+}
+
+.modal-info-value {
+    color: var(--txt-1);
+}
+
+.modal-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+    padding: 48px 24px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--brand);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.modal-loading p {
+    margin: 0;
+    color: var(--txt-1);
+    font-size: 14px;
+}
+
+.modal-success {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+    padding: 48px 24px;
+}
+
+.modal-success-icon {
+    font-size: 54px;
+    color: #22c55e;
+}
+
+.modal-success-title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--txt-0);
+}
+
+.modal-success-text {
+    margin: 0;
+    color: var(--txt-1);
+    font-size: 14px;
 }
 

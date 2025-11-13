@@ -381,7 +381,7 @@
                             </div>
                         </form>
                     `;
-                    // Re-attach event listener
+                    // Event-Listener erneut anhängen
                     const form = document.getElementById('melden-form');
                     if (form) {
                         form.addEventListener('submit', handleFormSubmit);
@@ -395,17 +395,17 @@
             });
         }
         
-        // Attach initial form listener
+        // Initialer Form-Event-Listener anhängen
         document.getElementById('melden-form').addEventListener('submit', handleFormSubmit);
         
-        // Close modal when clicking outside
+        // Modal schließen, wenn außerhalb des Modals geklickt wird
         document.getElementById('melden-modal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeMeldenModal();
             }
         });
         
-        // Check if user is logged in and update UI accordingly
+        // Prüfen, ob User eingeloggt ist und UI entsprechend aktualisieren
         function checkUserLoginStatus() {
             fetch('/api/user/current')
                 .then(response => {
@@ -415,25 +415,25 @@
                     return response.json();
                 })
                 .then(data => {
-                    // User is logged in
+                    // User ist eingeloggt
                     const isLoggedIn = data && data.username && data.username !== 'anonymousUser';
                     
                     if (isLoggedIn) {
-                        // Update login link to dashboard
+                        // Login-Link auf Dashboard aktualisieren
                         const loginLink = document.getElementById('login-dashboard-link');
                         if (loginLink) {
                             loginLink.textContent = 'Dashboard';
                             loginLink.href = '/dashboard';
                         }
                         
-                        // Update login link in CTA section
+                        // Login-Link in CTA-Bereich aktualisieren
                         const loginCtaLink = document.getElementById('login-cta-link');
                         if (loginCtaLink) {
                             loginCtaLink.textContent = 'Dashboard';
                             loginCtaLink.href = '/dashboard';
                         }
                         
-                        // Show logout button
+                        // Ausloggen-Button anzeigen
                         const logoutForm = document.getElementById('logout-form-header');
                         if (logoutForm) {
                             logoutForm.style.display = 'block';
@@ -461,23 +461,23 @@
                     const isLoggedIn = data && data.username && data.username !== 'anonymousUser';
                     
                     if (isLoggedIn) {
-                        // Redirect to dashboard - the modal will open there
+                        // Weiterleiten zum Dashboard - das Modal wird dort geöffnet
                         window.location.href = '/dashboard';
-                        // After redirect, trigger the modal (this will be handled by layout.html)
-                        // We can use a URL parameter or sessionStorage to trigger modal
+                        // Nach Weiterleitung, das Modal auslösen (dies wird von layout.html behandelt)
+                        // Wir können ein URL-Parameter oder sessionStorage verwenden, um das Modal auszulösen
                         sessionStorage.setItem('openMeldenModal', 'true');
                     } else {
-                        // Not logged in - open modal on index page
+                        // Nicht eingeloggt - Modal auf Index-Seite öffnen
                         openMeldenModal();
                     }
                 })
                 .catch(error => {
-                    // Not logged in - open modal on index page
+                    // Nicht eingeloggt - Modal auf Index-Seite öffnen
                     openMeldenModal();
                 });
         }
         
-        // Check login status on page load
+        // Prüfen, ob User eingeloggt ist beim Laden der Seite
         checkUserLoginStatus();
     </script>
 </body>

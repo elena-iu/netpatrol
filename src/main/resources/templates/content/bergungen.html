@@ -144,7 +144,7 @@
                         return;
                     }
 
-                    // Resolve salvor usernames in parallel with caching
+                    // Bergende-Usernames parallel laden und cachen
                     const usernamePromises = pending.map(net => fetchSalvorUsername(net.salvorUserId));
                     const usernames = await Promise.all(usernamePromises);
 
@@ -181,7 +181,7 @@
                 .then(r => r.ok ? r.json() : null)
                 .then(data => {
                     if (data && data.username) {
-                        // Fetch full user to get ID
+                        // Vollständigen User laden um ID zu erhalten
                         return fetch(`/api/user/by-username/${data.username}`)
                             .then(r => r.ok ? r.json() : null);
                     }
@@ -267,7 +267,7 @@
             })
             .then(() => {
                 loadRequests();
-                loadBergungen(); // Reload to show updated assignments
+                loadBergungen(); // Neu laden um aktualisierte Zuweisungen zu zeigen
             })
             .catch(err => {
                 console.error('Error accepting request:', err);
@@ -362,7 +362,7 @@
                         <button type="button" class="btn btn-primary" onclick="submitContactCaptcha()">Bestätigen</button>
                     </div>
                 </div>`;
-            // ensure captcha appears and refresh button works
+            // Captcha erscheint und Refresh-Button funktioniert
             setTimeout(window.generateContactCaptcha, 50);
         }
         
@@ -405,7 +405,7 @@
                 return r.json();
             })
             .then(() => {
-                // Show success message in the modal (consistent with other modals)
+                // Erfolgsmeldung im Modal anzeigen (konsistent mit anderen Modals)
                 const modal = document.getElementById('contact-modal');
                 const content = modal ? modal.querySelector('.modal-content') : null;
                 if (content) {
@@ -419,7 +419,7 @@
                 }
                 setTimeout(() => {
                     closeContactModal();
-                    // Refresh requests section to show new pending request if viewer is salvor
+                    // Umverteilungsanfragen-Abschnitt neu laden um neue ausstehende Anfrage zu zeigen wenn der Viewer der Bergende ist
                     if (typeof loadRequests === 'function') {
                         loadRequests();
                     }
@@ -513,7 +513,7 @@
 </div>
 
 <script>
-    // Close modal when clicking outside
+    // Modal schließen wenn außerhalb des Modals geklickt wird
     document.getElementById('contact-modal').addEventListener('click', function(e) {
         if (e.target === this) {
             closeContactModal();

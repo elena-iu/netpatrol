@@ -352,7 +352,7 @@ public class GhostNetController {
                 ghostNet.setReporterName(reporterName);
             }
             
-            // Set reported_by - always use username (guaranteed to be non-empty for authenticated users)
+            // reported_by setzen - immer username verwenden (für authentifizierte User garantiert nicht-leer)
             String reportedBy = ghostNet.getReportedBy();
             if (reportedBy == null || reportedBy.trim().isEmpty()) {
                 reportedBy = username;
@@ -364,7 +364,6 @@ public class GhostNetController {
             if (reporterId == null) {
                 reporterId = user.getId();
                 if (reporterId == null) {
-                    // This should never happen for authenticated users, but handle it
                     return ResponseEntity.status(500).body(Map.of("error", "User ID is null"));
                 }
                 ghostNet.setReporterId(reporterId);
@@ -380,7 +379,7 @@ public class GhostNetController {
                     "', reporterId=" + ghostNet.getReporterId()));
             }
             
-            // Log the values being set for debugging
+            // Log-Eintrag für Debugging
             logger.debug("Setting contact info - reporterName: '{}', reportedBy: '{}', reporterId: {}", 
                         ghostNet.getReporterName(), ghostNet.getReportedBy(), ghostNet.getReporterId());
             

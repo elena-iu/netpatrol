@@ -67,7 +67,7 @@ public class ReassignmentRequestController {
             
             GhostNet ghostNet = ghostNetOpt.get();
             if (ghostNet.getSalvorUserId() == null) {
-                return ResponseEntity.badRequest().build(); // No salvor assigned
+                return ResponseEntity.badRequest().build(); // Kein Bergender zugewiesen
             }
             
             String username = authentication.getName();
@@ -240,7 +240,7 @@ public class ReassignmentRequestController {
             
             ReassignmentRequest request = requestOpt.get();
             
-            // Verify the current user is the current salvor
+            // Prüfen ob der aktuelle User der aktuelle Bergende ist
             String username = authentication.getName();
             var userOpt = userRepository.findByUsername(username);
             if (userOpt.isEmpty()) {
@@ -311,7 +311,7 @@ public class ReassignmentRequestController {
             
             ReassignmentRequest request = requestOpt.get();
             
-            // Verify the current user is the current salvor
+            // Prüfen ob der aktuelle User der aktuelle Bergende ist
             String username = authentication.getName();
             var userOpt = userRepository.findByUsername(username);
             if (userOpt.isEmpty()) {
